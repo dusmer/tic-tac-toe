@@ -30,6 +30,9 @@ const gameBoardModule = (() => {
         gameState = 1;
         gameBoardModule.resetGame();
         gameBoardModule.eventListeners();
+        const boardDisplay = document.querySelector(".boardContainer");
+        boardDisplay.setAttribute('style', 'display: grid');    
+
 
     })
     
@@ -41,10 +44,10 @@ const gameBoardModule = (() => {
 
                 if (gameBoard[square.dataset.position] == "" && gameState == 1){
                     gameBoardModule.addSymbol(currentPlayer.symbol, square.dataset.position);
-                    console.log(gameStatus());
                     displayBoard();
-                    if (currentPlayer == player1){
+                    if (currentPlayer == player1 && gameState == 1){
                         currentPlayer = player2;
+                        aiMove();
                     } else{
                         currentPlayer = player1;
                     }
@@ -72,6 +75,7 @@ const gameBoardModule = (() => {
 
 
         })
+
     }
 
     const resetGame = () => {
@@ -86,8 +90,25 @@ const gameBoardModule = (() => {
         for(x = 0; x < 9; x++){
             const square = document.querySelector(`#board${x}`);
             square.textContent = gameBoard[x];
+            gameStatus();
         }
     };
+
+    
+    const aiMove = () => {
+       let openSpots = []
+       gameBoard.map((currElement, index) => {
+            if (currElement == ""){
+                openSpots.push(index);
+            }
+            
+        })
+        const spot = openSpots[Math.floor(Math.random()*openSpots.length)];
+        addSymbol("O",spot)
+        displayBoard();
+        currentPlayer = player1;
+        console.log(spot);
+    }
 
     return{gameBoard, addSymbol, gameStatus, resetGame, eventListeners};
 })();
@@ -98,3 +119,4 @@ const gameController = () => {
 
 
 }
+
